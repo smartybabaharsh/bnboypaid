@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legend Predictor</title>
+    <style>
+        /* General Styling */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: black;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Particle Background */
+        #particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            animation: moveParticle linear infinite;
+        }
+
+        @keyframes moveParticle {
+            from {
+                transform: translateY(-10vh);
+            }
+            to {
+                transform: translateY(110vh);
+            }
+        }
+
+        /* Glowing Text Effect */
+        .glowing-text {
+            color: white;
+            text-shadow: 0 0 5px red, 0 0 10px red, 0 0 15px red, 0 0 20px red, 0 0 25px red;
+        }
+
+        /* Central Linear with Stroke */
+        .center-box {
+            position: relative;
+            padding: 20px;
+            background: transparent;
+            border: 2px solid red;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .center-box h1 {
+            margin: 10px 0;
+            font-size: 20px;
+        }
+
+        /* TextView Styling */
+        .textview {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        /* Buttons */
+        .button {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: red;
+            color: white;
+            transition: 0.3s;
+        }
+
+        .button:hover {
+            background-color: darkred;
+        }
+
+        /* ListView Styling */
+        .history {
+            display: none;
+            margin-top: 20px;
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid white;
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .history-item {
+            margin: 5px 0;
+            color: lightgreen;
+        }
+    </style>
+</head>
+<body>
+    <div id="particles"></div>
+
+    <!-- Main Container -->
+    <div class="center-box">
+        <h1 id="textview1" class="glowing-text">VIP PRIVATE SERBER WEB </h1>
+        <h1 id="textview2" class="glowing-text">Timer: 00:00</h1>
+        <h1 id="textview3" class="glowing-text">Result: </h1>
+
+        <!-- Buttons -->
+        <button class="button" id="button1">Check Results</button>
+        <button class="button" id="button2">History</button>
+
+        <!-- ListView for History -->
+        <div class="history" id="history"></div>
+    </div>
+
+    <script>
+        // Particle Animation
+        const particleCount = 100;
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.animationDuration = Math.random() * 5 + 5 + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // Result Data
+        const results = [
+            "BIG 9 🟢", "BIG 8 🔴", "BIG 7 🟢", "BIG 6 🔴",
+            "BIG 5 🟢", "SMALL 4 🔴", "SMALL 3 🟢", "SMALL 2 🔴",
+            "SMALL 1 🟢", "SMALL 0 🔴"
+        ];
+
+        // Timer Logic
+        let resultGenerated = false;
+        let historyList = [];
+
+        function updateTimer() {
+            const timer = document.getElementById('textview2');
+            const currentDate = new Date();
+            const seconds = currentDate.getSeconds();
+            const remainingSeconds = 60 - seconds;
+            timer.textContent = `Timer: 00:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+        }
+
+        setInterval(updateTimer, 1000);
+
+        // Result Generation
+        document.getElementById('button1').addEventListener('click', () => {
+            if (resultGenerated) {
+                alert("");
+                return;
+            }
+
+            const randomResult = results[Math.floor(Math.random() * results.length)];
+            const resultView = document.getElementById('textview3');
+            resultView.textContent = `Result: ${randomResult}`;
+            historyList.push(randomResult);
+            resultGenerated = true;
+
+            setTimeout(() => {
+                resultGenerated = false;
+            }, 60000); // Reset after 1 minute
+        });
+
+        // Show History
+        document.getElementById('button2').addEventListener('click', () => {
+            const historyContainer = document.getElementById('history');
+            historyContainer.innerHTML = historyList.map(item => `<div class="history-item">${item}</div>`).join('');
+            historyContainer.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
